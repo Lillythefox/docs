@@ -61,8 +61,6 @@ sudo systemctl stop pistar-watchdog.service  # prevents watchdog from starting M
 sudo systemctl stop mmdvmhost.timer          # prevents MMDVMhost from starting while flashing
 sudo systemctl stop mmdvmhost.service        # kills MMDVMhost
 
-
-
 # Flash the new Firmware
 sudo ./stm32flashV5 -v -w ./MMDVM/bin/mmdvm_f4.hex  -R  -i 20,-21,21:-20,-21,21 /dev/ttyAMA0
 ```
