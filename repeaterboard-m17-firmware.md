@@ -11,14 +11,14 @@ The Steps i did to get M17 with the MMDVM Repeater Board Pi-Star running. If you
 - https://w0chp.net/w0chp-pistar-dash/
 - https://www.bi7jta.org/shop/mmdvm-repeater-board-v3f4-dmr-ysf-d-star-nxdn-pocsag-fm-3#attr=63,27,117
 
-1.) Install the Pi-Star Fork
+1. Install `W0CHP-PiStar-Dash`
 
 ```bash
-# Enable Read / Write Mode
-rpi-rw
+  curl -Ls https://w0chp.net/WPSD-Install | sudo env NO_SELF_UPDATE=1 bash -s -- -idc
 ```
+⚠️ You must run the aforementioned command with the exact syntax. Note the spaces and extra -- (dashes), etc. Otherwise, the command will fail.
 
-2.)  Grow your root Partition if needed:
+2.  Grow your root Partition if needed:
 ```bash
 # Check which partition is your root (/) partition
 # In my case it was /dev/sda2
@@ -34,7 +34,7 @@ sudo growpart /dev/sda 2
 sudo resize2fs /dev/sda2
 ```
 
-3.) Compile Firmware:
+3. Compile Firmware:
 ```bash
 # Install dependencies. Some of them are probably not needed.
 sudo apt-get install git gcc-arm-none-eabi gcc-arm-none-eabi gdb-arm-none-eabi libstdc++-arm-none-eabi-newlib autoconf libtool pkg-config libusb-1.0-0 libusb-1.0-0-dev
@@ -55,11 +55,7 @@ make dvm
 cd ..
 
 # Kill the MMDVMHost and related processes
-sudo systemctl stop cron                     # prevents FS from going into R/O
-sudo systemctl stop pistar-watchdog.timer    # prevents watchdog from restarting
-sudo systemctl stop pistar-watchdog.service  # prevents watchdog from starting MMDVMhost while flashing
-sudo systemctl stop mmdvmhost.timer          # prevents MMDVMhost from starting while flashing
-sudo systemctl stop mmdvmhost.service        # kills MMDVMhost
+sudo pistar-services fullstop
 
 # Flash the new Firmware
 sudo ./stm32flashV5 -v -w ./MMDVM/bin/mmdvm_f4.hex  -R  -i 20,-21,21:-20,-21,21 /dev/ttyAMA0
