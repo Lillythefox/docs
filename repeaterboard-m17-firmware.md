@@ -54,8 +54,12 @@ make clean
 make dvm
 cd ..
 
-# Kill the MMDVMHost process
-sudo killall MMDVMHost >/dev/null 2>&1
+# Kill the MMDVMHost and related processes
+sudo systemctl stop cron                     # prevents FS from going into R/O
+sudo systemctl stop pistar-watchdog.timer    # prevents watchdog from restarting
+sudo systemctl stop pistar-watchdog.service  # prevents watchdog from starting MMDVMhost while flashing
+sudo systemctl stop mmdvmhost.timer          # prevents MMDVMhost from starting while flashing
+sudo systemctl stop mmdvmhost.service        # kills MMDVMhost
 
 # Flash the new Firmware
 sudo ./stm32flashV5 -v -w ./MMDVM/bin/mmdvm_f4.hex  -R  -i 20,-21,21:-20,-21,21 /dev/ttyAMA0
