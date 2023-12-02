@@ -57,6 +57,9 @@ cd ..
 # Kill the MMDVMHost and related processes
 sudo pistar-services fullstop
 
+# Make stm32flashV5 executable 
+sudo 777 ./stm32flashV5
+
 # Flash the new Firmware
 sudo ./stm32flashV5 -v -w ./MMDVM/bin/mmdvm_f4.hex  -R  -i 20,-21,21:-20,-21,21 /dev/ttyAMA0
 ```
